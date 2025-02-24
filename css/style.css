@@ -1,6 +1,7 @@
 @charset "utf-8";
 :root {
-  --main-color: #eb4a4c;
+  /* --main-color: #eb4a4c; */
+  --main-color: #002BFF;
 }
 html {
   overflow-x: hidden;
