@@ -228,6 +228,153 @@
           topOffset: -70           // offste (in px) for fixed top navigation
         });
       });
+
+      // Ensure last section stays active when scrolling to page bottom
+      $(window).on('scroll', function () {
+        var scrollTop = $(this).scrollTop();
+        var windowHeight = $(this).height();
+        var documentHeight = $(document).height();
+        if (scrollTop + windowHeight >= documentHeight - 2) {
+          var lastIndex = $('[data-scroll-index]').last().attr('data-scroll-index');
+          if (lastIndex !== undefined) {
+            $('[data-scroll-nav]').removeClass('active');
+            $('[data-scroll-nav="' + lastIndex + '"]').addClass('active');
+          }
+        }
+      });
+    }
+  }
+
+  /*--------------------
+      * Form Validation
+  ----------------------*/
+  NAY.FormValidation = function () {
+    if ($('#contact-form').exists()) {
+      var $nameField = $('#name');
+      var $emailField = $('#email');
+      var $subjectField = $('#subject');
+      var $messageField = $('#message');
+      var $errorMsg = $('#err_message');
+
+      // Helper function to show error
+      function showError(message) {
+        $errorMsg.text(message).show();
+        setTimeout(function () {
+          $errorMsg.fadeOut();
+        }, 3000);
+      }
+
+      // Name validation: letters only, no leading space, max 1 space at a time
+      $nameField.on('input', function () {
+        var value = $(this).val();
+        // Remove leading spaces
+        if (value.charAt(0) === ' ') {
+          $(this).val(value.trimStart());
+          return;
+        }
+        // Replace multiple spaces with single space
+        value = value.replace(/\s{2,}/g, ' ');
+        // Allow only letters and single spaces
+        value = value.replace(/[^a-zA-Z\s]/g, '');
+        $(this).val(value);
+      });
+
+      // Email validation: no spaces allowed
+      $emailField.on('input', function () {
+        var value = $(this).val();
+        // Remove all spaces
+        value = value.replace(/\s/g, '');
+        $(this).val(value);
+      });
+
+      // Subject validation: no leading space, min 5 chars, max 1 space at a time
+      $subjectField.on('input', function () {
+        var value = $(this).val();
+        // Remove leading spaces
+        if (value.charAt(0) === ' ') {
+          $(this).val(value.trimStart());
+          return;
+        }
+        // Replace multiple spaces with single space
+        value = value.replace(/\s{2,}/g, ' ');
+        $(this).val(value);
+      });
+
+      // Message validation: no leading space, min 5 chars, max 1 space at a time
+      $messageField.on('input', function () {
+        var value = $(this).val();
+        // Remove leading spaces
+        if (value.charAt(0) === ' ') {
+          $(this).val(value.trimStart());
+          return;
+        }
+        // Replace multiple spaces with single space
+        value = value.replace(/\s{2,}/g, ' ');
+        $(this).val(value);
+      });
+
+      // Validation before form submission
+      window.validateContactForm = function () {
+        var name = $nameField.val().trim();
+        var email = $emailField.val().trim();
+        var subject = $subjectField.val().trim();
+        var message = $messageField.val().trim();
+
+        // Name validation
+        if (name === '') {
+          showError('Please enter your name');
+          $nameField.focus();
+          return false;
+        }
+        if (name.length < 3) {
+          showError('Name must be at least 3 characters');
+          $nameField.focus();
+          return false;
+        }
+        if (!/^[a-zA-Z\s]+$/.test(name)) {
+          showError('Name should contain only letters');
+          $nameField.focus();
+          return false;
+        }
+
+        // Email validation
+        if (email === '') {
+          showError('Please enter your email');
+          $emailField.focus();
+          return false;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showError('Please enter a valid email address');
+          $emailField.focus();
+          return false;
+        }
+
+        // Subject validation
+        if (subject === '') {
+          showError('Please enter a subject');
+          $subjectField.focus();
+          return false;
+        }
+        if (subject.length < 5) {
+          showError('Subject must be at least 5 characters');
+          $subjectField.focus();
+          return false;
+        }
+
+        // Message validation
+        if (message === '') {
+          showError('Please enter your message');
+          $messageField.focus();
+          return false;
+        }
+        if (message.length < 10) {
+          showError('Message must be at least 10 characters');
+          $messageField.focus();
+          return false;
+        }
+
+        return true;
+      };
     }
   }
 
@@ -270,6 +417,7 @@
       NAY.mTypeIt(),
       NAY.one_page(),
       NAY.Owl(),
+      NAY.FormValidation(),
       $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" });
   });
 
