@@ -205,8 +205,9 @@
           speed: 200,
           loop: true,
           strings: [
-            'Designer',
-            'Developer'
+            'Django Developer',
+            'React JS Developer',
+            'Web App Developer'
           ],
           breakLines: false
         });
