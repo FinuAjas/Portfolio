@@ -205,9 +205,9 @@
           speed: 200,
           loop: true,
           strings: [
-            'Django Developer',
-            'React JS Developer',
-            'Web App Developer'
+            'E-commerce Developer',
+            'CRM & ERP Developer',
+            'REST API Developer'
           ],
           breakLines: false
         });
